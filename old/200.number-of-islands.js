@@ -21,6 +21,8 @@ var numIslands = function (grid) {
         .map(() => Array(col).fill(0));
     for (let i = 0; i < row; i++) {
         for (let j = 0; j < col; j++) {
+            console.log('mark :>> ', mark);
+
             if (grid[i][j] === "0" || mark[i][j] === 1) {
                 continue;
             }
@@ -31,7 +33,9 @@ var numIslands = function (grid) {
 
             // ----- bfs -----
             let q = [[i, j]];
-            [mark, q] = bfs(grid, mark, q);
+            {mark, q} = bfs2(grid, mark, q);
+            console.log('mark :>> ', mark);
+
             // ----- bfs end -----
 
             ret++;
@@ -70,11 +74,50 @@ const dfs = (i, j, grid, mark) => {
     return mark;
 };
 
-const bfs = (grid, mark, q) => {
+// const bfs = (grid, mark, q) => {
+//     const row = grid.length;
+//     const col = grid[0].length;
+//     if (!q.length) {
+//         return [mark, []];
+//     }
+
+//     for (let point of q) {
+//         let [i, j] = point;
+//         if (i > 0) {
+//             if (mark[i - 1][j] !== 1 && grid[i - 1][j] === "1") {
+//                 mark[i - 1][j] = 1;
+//                 q.push([i - 1, j]);
+//             }
+//         }
+//         if (j > 0) {
+//             if (mark[i][j - 1] !== 1 && grid[i][j - 1] === "1") {
+//                 mark[i][j - 1] = 1;
+//                 q.push([i, j - 1]);
+//             }
+//         }
+//         if (i < row - 1) {
+//             if (mark[i + 1][j] !== 1 && grid[i + 1][j] === "1") {
+//                 mark[i + 1][j] = 1;
+//                 q.push([i + 1, j]);
+//             }
+//         }
+//         if (j < col - 1) {
+//             if (mark[i][j + 1] !== 1 && grid[i][j + 1] === "1") {
+//                 mark[i][j + 1] = 1;
+//                 q.push([i, j + 1]);
+//             }
+//         }
+//     }
+//     q.shift();
+//     [(mark, q)] = bfs(grid, mark, q);
+//     return [mark, q];
+// };
+
+const bfs2 = (grid, mark, q) => {
     const row = grid.length;
     const col = grid[0].length;
     if (!q.length) {
-        return [mark, []];
+        return {mark, q};
     }
 
     for (let point of q) {
@@ -105,16 +148,19 @@ const bfs = (grid, mark, q) => {
         }
     }
     q.shift();
-    [(mark, q)] = bfs(grid, mark, q);
-    return [mark, q];
-};
+    let {mark, q} = bfs2(grid, mark, q);
+    return {mark, q}
 
-// const grid = [
-//     ["1","1","0","0","0"],
-//     ["1","1","0","0","0"],
-//     ["0","0","1","0","0"],
-//     ["0","0","0","1","1"]
-// ]
-// const ret = numIslands(grid)
-// console.log('ret :>> ', ret);
+
+
+}
+
+const grid = [
+    ["1","1","0","0","0"],
+    ["1","1","0","0","0"],
+    ["0","0","1","0","0"],
+    ["0","0","0","1","1"]
+]
+const ret = numIslands(grid)
+console.log('ret :>> ', ret);
 // @lc code=end
